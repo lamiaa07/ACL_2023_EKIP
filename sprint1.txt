@@ -1,0 +1,18 @@
+Sprint 1 
+  Objectifs: 
+    - mise en place git, build automatique du code 
+    - préparation du backlog 
+    - réalisation d'une première version du jeu 
+  A rendre (dans un fichier sur le dépôt):
+    --> à la fin de la séance de TP (s40):
+        - backlog sprint 1
+    --> à 18h, le lendemain de la séance de TP (s40):
+        - backlog complet 
+        - distribution de tâches entre les membres de l'équipe
+        - diagramme de classes pour le sprint 1
+    --> à 18h, la veille de la séance de TP (s46):
+        - version du code disponible dans le dépôt, tag V1
+        - diagramme de classes mis à jour (si changements)
+        - sprint review
+        - sprint retrospective 
+        - pensez à préparer en avance le sprint 2 (backlog + diagrammes + distribution tâches)
