@@ -1,0 +1,4 @@
+1. modifier le labyrinthe , de telle façon qu on le genere depuis un fichier
+2.finir les methodes de deplacement de la classe heros et monstres
+3.creer les contours du labyrinthe 
+4.Ajouter la méthode qui permet de tuer un heros au contact d un monstre
