@@ -1,0 +1,5 @@
+1. impléménter une méthode pour générer aléatoirement le labyrinthe
+2.finir les methodes de deplacement de la classe heros et monstres
+3.creer les contours du labyrinthe 
+4.Ajouter la méthode qui permet de tuer un heros au contact d un monstre
+5.Ajouter un interface qui permet d'afficher les points de vie du héros.
