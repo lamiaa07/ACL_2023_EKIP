@@ -3,3 +3,4 @@
 3.creer les contours du labyrinthe 
 4.Ajouter la méthode qui permet de tuer un heros au contact d un monstre
 5.Ajouter un interface qui permet d'afficher les points de vie du héros.
+
