@@ -1,0 +1,28 @@
+Gestion de projet : Projet de jeu du labyrinthe
+
+
+Objectif : Notre objectif est de développer un jeu de labyrinthe en mettant en place les classes Personnage et Labyrinthe, la logique de déplacement,
+ et la génération des bordures du labyrinthe. Nous intégrerons également de nouvelles tâches pour répondre à nos besoins.
+
+
+
+Nous avons mis en place les classes Personnage et Labyrinthe, développé la logique de déplacement, et généré les bordures du labyrinthe.
+
+
+
+Conception des diagrammes de séquence et de communication : Avant de poursuivre, nous réaliserons des diagrammes de séquence et de communication
+pour visualiser les interactions entre les différentes parties du jeu.
+
+
+Génération aléatoire des obstacles : Nous ajouterons la tâche de créer des obstacles aléatoires dans le labyrinthe pour augmenter la complexité du jeu.
+
+
+Gestion des interactions entre les personnages : Nous implémenterons les mécanismes permettant aux personnages d'interagir entre eux.
+
+
+Développement d'une première version graphique : Pour améliorer l'expérience utilisateur, nous créerons une première version graphique du jeu.
+
+
+Nous planifions des réunions périodiques, que ce soit en présentiel ou via Discord, afin de discuter de l'évolution du projet.
+
+Cependant, nous avons constaté que la répartition des tâches n'est pas optimale en raison d'une forte interdépendance entre les différentes étapes du projet.
