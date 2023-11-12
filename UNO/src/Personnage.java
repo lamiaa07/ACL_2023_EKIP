@@ -1,51 +1,49 @@
 
-public class Personnage {
+import java.util.ArrayList;
 
-	    private int pointsDeVie;
-	    private int positionX;
-	    private int positionY;
-	    private int vitesseDeplacement;
+public class Personnage extends Position {
 
-	    public Personnage(int pointsDeVie, int positionX, int positionY, int vitesseDeplacement) {
-	        this.pointsDeVie = pointsDeVie;
-	        this.positionX = positionX;
-	        this.positionY = positionY;
-	        this.vitesseDeplacement = vitesseDeplacement;
-	    }
 
-	    public void deplacerHaut() {
-	        positionY -= vitesseDeplacement;
-	    }
+	private int vie;
+	private int attaque;
 
-	    public void deplacerBas() {
-	        positionY += vitesseDeplacement;
-	    }
-
-	    public void deplacerGauche() {
-	        positionX -= vitesseDeplacement;
-	    }
-
-	    public void deplacerDroite() {
-	        positionX += vitesseDeplacement;
-	    }
-
-	    public void attaquer(Personnage cible) {
-	        int degats = 10; // Vous pouvez ajuster les dégâts selon vos besoins
-	        cible.subirDegats(degats);
-	    }
-
-	    public void subirDegats(int degats) {
-	        pointsDeVie -= degats;
-	        if (pointsDeVie < 0) {
-	            pointsDeVie = 0;
-	        }
-	    }
-
-	    public boolean estVivant() {
-	        return pointsDeVie > 0;
-	    }
-
-	    // Ajoutez d'autres méthodes ou attributs spécifiques au personnage si nécessaire
+	public Personnage (int x,int y, int vie,int attaque) {
+		super(x, y);
+		this.vie=vie;
+		this.attaque=attaque;
 	}
 
+	public ArrayList<Integer> position(String cmd) {
+		ArrayList<Integer> coord = new ArrayList<Integer>(getCoord());
+		if(cmd.equals("z")) {
+			coord.set(1,coord.get(1)+1);
+		}
+		if(cmd.equals("q")) {
+			coord.set(0,coord.get(0)-1);
+		}
+		if(cmd.equals("s")) {
+			coord.set(1,coord.get(1)-1);
+		}
+		if(cmd.equals("d")) {
+			coord.set(0,coord.get(0)+1);
+		}
+		return coord;
+	}
 
+	public int getVie() {
+		return vie;
+	}
+
+	public void setVie(int vie) {
+		this.vie = vie;
+	}
+
+	public int getAttaque() {
+		return attaque;
+	}
+
+	public void setAttaque(int attaque) {
+		this.attaque = attaque;
+	}
+
+}
