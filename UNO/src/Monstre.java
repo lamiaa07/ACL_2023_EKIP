@@ -1,32 +1,45 @@
-
-import java.util.ArrayList;
 import java.util.Random;
 
-public class Monstre extends Personnage {
+class Monstre extends Personne {
+    Monstre(int x, int y) {
+        super(x, y);
+    }
 
-	public Monstre(int x, int y, int vie, int attaque) {
-		super(x, y, vie, attaque);
-	}
+    void deplacerAleatoirement(boolean[][] murs) {
+        Random random = new Random();
+        int direction;
+        do {
+            direction = random.nextInt(4);
+        } while (!estDeplacementValide(direction, murs));
 
-	Random rand = new Random();
+        switch (direction) {
+            case 0:
+                x--;
+                break;
+            case 1:
+                x++;
+                break;
+            case 2:
+                y--;
+                break;
+            case 3:
+                y++;
+                break;
+        }
+    }
 
-	public ArrayList<Integer> positionMonstre() {
-		int r = rand.nextInt(5);
-		String cmd = "";
-		if (r == 0) {
-			cmd = "z";			// Le monstre veut aller en haut
-		}
-		else if (r == 1) {
-			cmd = "q";			// Le monstre veut aller a gauche
-		}
-		else if (r == 2) {
-			cmd = "s";			// Le monstre veut aller en bas
-		}
-		else if (r == 3) {
-			cmd = "d";			// Le monstre veut aller a droite
-		}
-		else {					// Le monstre ne bouge pas
-		}
-		return position(cmd);
-	}
+    private boolean estDeplacementValide(int direction, boolean[][] murs) {
+        switch (direction) {
+            case 0:
+                return x > 0 && !murs[x - 1][y];
+            case 1:
+                return x < murs.length - 1 && !murs[x + 1][y];
+            case 2:
+                return y > 0 && !murs[x][y - 1];
+            case 3:
+                return y < murs[0].length - 1 && !murs[x][y + 1];
+            default:
+                return false;
+        }
+    }
 }

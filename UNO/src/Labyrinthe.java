@@ -1,64 +1,178 @@
 import java.util.Random;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
-	public class Labyrinthe extends JFrame {
-		JPanel p;
 
-		static final int p_width = 400;
-		static final int p_height = 200;
-		static final int b_width = 90;
-		static final int b_height = 50;
 
-		Labyrinthe() {
-			p = new JPanel();
-			p.setPreferredSize(new Dimension(p_width,p_height));
-			p.setLayout(null);
-			JButton b_1 = new JButton("niveau 1");
-			b_1.setBounds(p_width/4-b_width/2,(p_height-b_height)/2,b_width,b_height);
-			b_1.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					final int niveau = 1;
-					ecran_de_jeu(niveau);
-				}
-			});
-			p.add(b_1);
-			JButton b_2 = new JButton("niveau 2");
-			b_2.setBounds(2*p_width/4-b_width/2,(p_height-b_height)/2,b_width,b_height);
-			b_2.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					final int niveau = 2;
-					ecran_de_jeu(niveau);
-				}
-			});
-			p.add(b_2);
-			JButton b_3 = new JButton("niveau 3");
-			b_3.setBounds(3*p_width/4-b_width/2,(p_height-b_height)/2,b_width,b_height);
-			b_3.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					final int niveau = 3;
-					ecran_de_jeu(niveau);
-				}
-			});
-			p.add(b_3);
-			this.setTitle("Jeu");
-			this.add(p);
-			this.pack();
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			this.setResizable(false);
-			this.setVisible(true);
-			this.setLocationRelativeTo(null);
-		}
 
-		public void ecran_de_jeu(int niveau) {
-			this.remove(p);
-			GamePanel panel = new GamePanel(niveau);
-			this.add(panel);
-			this.pack();
-			this.setVisible(true);
-			panel.requestFocusInWindow();
-			this.setLocationRelativeTo(null);
-		}
-	}
+
+class Labyrinthe extends JFrame implements ActionListener, KeyListener {
+    static final int SIZE = 10;
+    private static final int CELL_SIZE = 30;
+
+    private Heros heros;
+    private Monstre monstre;
+    private boolean[][] murs;
+
+    private boolean herosABouge;
+
+    private Timer timer;
+    private int nombreAttrapages;
+
+    Labyrinthe() {
+        setTitle("Labyrinth Game");
+        setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        initialiserJeu();
+
+        timer = new Timer(500, this);
+        timer.start();
+
+        addKeyListener(this);
+        setFocusable(true);
+         nombreAttrapages = 0;
+    }
+
+    private void initialiserJeu() {
+        heros = new Heros(1, 1);
+        placerMonstre();
+        initialiserMurs();
+        herosABouge = false;
+    }
+
+    private void placerMonstre() {
+        Random random = new Random();
+        do {
+            monstre = new Monstre(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
+        } while (monstre.x == heros.x && monstre.y == heros.y);
+    }
+
+    private void initialiserMurs() {
+        murs = new boolean[SIZE][SIZE];
+
+        // Murs le long des bords
+        for (int i = 0; i < SIZE; i++) {
+            murs[i][0] = true;           // Haut
+            murs[i][SIZE - 1] = true;    // Bas
+            murs[0][i] = true;           // Gauche
+            murs[SIZE - 1][i] = true;    // Droite
+        }
+
+        // Murs à l'intérieur (ajoutez vos murs ici)
+        murs[3][4] = true;
+        murs[5][6] = true;
+        murs[7][8] = true;
+    }
+
+    private void verifierCollision() {
+        if (heros.x == monstre.x && heros.y == monstre.y) {
+            nombreAttrapages++;
+
+            if (nombreAttrapages < 3) {
+                JOptionPane.showMessageDialog(this, " Monster caught you! You have " + (3-nombreAttrapages) + " lives left.Stay alert !");
+                initialiserJeu();
+            } else {
+                JOptionPane.showMessageDialog(this, "Game Over! Caught 3 times.");
+                timer.stop();
+                System.exit(0); // Terminer le programme
+            }
+        }
+    }
+
+    private void verifierVictoire() {
+        // Ajoutez ici des conditions pour la victoire si nécessaire
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (herosABouge) {
+            monstre.deplacerAleatoirement(murs);
+            herosABouge = false;
+        }
+        verifierCollision();
+        verifierVictoire();
+        repaint();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                if (heros.y > 0 && !murs[heros.x][heros.y - 1]) {
+                    heros.y--;
+                    herosABouge = true;
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                if (heros.y < SIZE - 1 && !murs[heros.x][heros.y + 1]) {
+                    heros.y++;
+                    herosABouge = true;
+                }
+                break;
+            case KeyEvent.VK_LEFT:
+                if (heros.x > 0 && !murs[heros.x - 1][heros.y]) {
+                    heros.x--;
+                    herosABouge = true;
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                if (heros.x < SIZE - 1 && !murs[heros.x + 1][heros.y]) {
+                    heros.x++;
+                    herosABouge = true;
+                }
+                break;
+        }
+
+        verifierCollision();
+        verifierVictoire();
+        repaint();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        // Dessine le labyrinthe
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (murs[i][j]) {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                }
+            }
+        }
+
+        // Dessine le héros en rose
+        g.setColor(Color.PINK);
+        g.fillRect(heros.x * CELL_SIZE, heros.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+        // Dessine le monstre
+        g.setColor(Color.RED);
+        g.fillRect(monstre.x * CELL_SIZE, monstre.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Labyrinthe jeu = new Labyrinthe();
+            jeu.setVisible(true);
+        });
+    }
+}
