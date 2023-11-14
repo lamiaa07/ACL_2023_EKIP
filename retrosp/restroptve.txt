@@ -14,7 +14,7 @@ Conception des diagrammes de séquence et de communication : Avant de poursuivre
 pour visualiser les interactions entre les différentes parties du jeu.
 
 
-Génération aléatoire des obstacles : Nous ajouterons la tâche de créer des obstacles aléatoires dans le labyrinthe pour augmenter la complexité du jeu.
+Génération des obstacles : Nous ajouterons la tâche de créer des obstacles dans le labyrinthe pour augmenter la complexité du jeu.
 
 
 Gestion des interactions entre les personnages : Nous implémenterons les mécanismes permettant aux personnages d'interagir entre eux.
