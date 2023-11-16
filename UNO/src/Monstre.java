@@ -1,45 +1,68 @@
-import java.util.Random;
+import java.util.Stack;
 
 class Monstre extends Personne {
     Monstre(int x, int y) {
         super(x, y);
     }
 
-    void deplacerAleatoirement(boolean[][] murs) {
-        Random random = new Random();
-        int direction;
-        do {
-            direction = random.nextInt(4);
-        } while (!estDeplacementValide(direction, murs));
+    void deplacerIntelligemment(boolean[][] murs, Heros heros) {
+        Stack<Position> stack = new Stack<>();
+        stack.push(new Position(x, y));
 
-        switch (direction) {
-            case 0:
-                x--;
-                break;
-            case 1:
-                x++;
-                break;
-            case 2:
-                y--;
-                break;
-            case 3:
-                y++;
-                break;
+        boolean[][] visite = new boolean[murs.length][murs[0].length];
+        visite[x][y] = true;
+
+        while (!stack.isEmpty()) {
+            Position current = stack.pop();
+
+            if (current.x == heros.x && current.y == heros.y) {
+                // Trouvé le héros, déplacer le monstre dans cette direction
+                if (x < current.x && !murs[x + 1][y]) {
+                    x++;
+                } else if (x > current.x && !murs[x - 1][y]) {
+                    x--;
+                } else if (y < current.y && !murs[x][y + 1]) {
+                    y++;
+                } else if (y > current.y && !murs[x][y - 1]) {
+                    y--;
+                }
+                return;
+            }
+
+            // Ajouter les positions voisines à la pile
+            ajouterVoisins(current, stack, visite, murs);
         }
     }
 
-    private boolean estDeplacementValide(int direction, boolean[][] murs) {
-        switch (direction) {
-            case 0:
-                return x > 0 && !murs[x - 1][y];
-            case 1:
-                return x < murs.length - 1 && !murs[x + 1][y];
-            case 2:
-                return y > 0 && !murs[x][y - 1];
-            case 3:
-                return y < murs[0].length - 1 && !murs[x][y + 1];
-            default:
-                return false;
+    private void ajouterVoisins(Position current, Stack<Position> stack, boolean[][] visite, boolean[][] murs) {
+        int x = current.x;
+        int y = current.y;
+
+        ajouterSiValide(stack, visite, x - 1, y, murs);
+        ajouterSiValide(stack, visite, x + 1, y, murs);
+        ajouterSiValide(stack, visite, x, y - 1, murs);
+        ajouterSiValide(stack, visite, x, y + 1, murs);
+    }
+
+    private void ajouterSiValide(Stack<Position> stack, boolean[][] visite, int x, int y, boolean[][] murs) {
+        if (x >= 0 && x < visite.length && y >= 0 && y < visite[0].length && !visite[x][y] && !murs[x][y]) {
+            stack.push(new Position(x, y));
+            visite[x][y] = true;
         }
     }
+
+    private static class Position {
+        int x, y;
+
+        Position(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+	@Override
+	void deplacerAleatoirement(boolean[][] murs) {
+		// TODO Auto-generated method stub
+		
+	}
 }

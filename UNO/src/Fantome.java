@@ -5,8 +5,8 @@ class Fantome extends Monstre {
         super(x, y);
     }
 
-    @Override
-    void deplacerAleatoirement(boolean[][] murs) {
+   /* @Override
+    void deplacerIntelligemment(boolean[][] murs, Heros heros) {
         Random random = new Random();
         int direction;
         do {
@@ -28,7 +28,7 @@ class Fantome extends Monstre {
                 break;
         }
     }
-
+*/
     //@Override
     boolean estDeplacementValide(int direction, boolean[][] murs) {
         // Le fantôme peut traverser les murs
