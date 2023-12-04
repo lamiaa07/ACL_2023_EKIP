@@ -6,7 +6,7 @@ class Heros extends Personne {
 
     Heros(int x, int y) {
         super(x, y);
-        this.vies = 3; // Initialise le nombre de vies à 4
+        this.vies = 3; // Initialise le nombre de vies à 3
     }
 
     int getVies() {
@@ -16,7 +16,10 @@ class Heros extends Personne {
     void perdreVie() {
         vies--;
     }
-
+    
+    public void incrementeVie() {
+        vies++;
+    }
 	@Override
 	void deplacerAleatoirement(boolean[][] murs) {
 		// TODO Auto-generated method stub

@@ -11,17 +11,15 @@ import java.awt.event.KeyListener;
 
 
 
-
-
 class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     static int SIZE ;
     static int CELL_SIZE ;
-    private Tresor tresor;
-    private Heros heros;
-    private Monstre monstre;
-    private boolean[][] murs;
-    private Fantome fantome;
-    private Piege piege;
+     Tresor tresor;
+    Heros heros;
+    Monstre monstre;
+    boolean[][] murs;
+    Fantome fantome;
+     Piege piege;
     private int niveau;
     private boolean herosABouge;
     private static final int SIZE_NIVEAU_1 = 15;
@@ -34,7 +32,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     //private List<Fantome> fantomes;
 
     private Timer timer;
-    private int nombreAttrapages;
+    int nombreAttrapages;
     private Image herosImage;
     private Image monstreImage;
     private Image tresorImage;
@@ -42,7 +40,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     private Image solImage;
     private Image fantomeImage;
     private Image piegeImage;
-    
+    Help help;
     Labyrinthe() {
         setTitle("Labyrinth Game");
         demanderNiveau(); // Demander le niveau en premier
@@ -85,6 +83,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
                 break;
         }
         setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE);
+        
     }
     private void demanderNiveau() {
     	 String niveauStr = JOptionPane.showInputDialog(this, "Choisissez le niveau (1, 2, ou 3):");
@@ -124,6 +123,8 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             placerFantome();
         }
         placerPiege();
+        help = Help.creerAideAleatoire(murs, heros);
+        
     }
 
     
@@ -162,7 +163,9 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         int x = 10; // Position x des cœurs dans la fenêtre
         int y = 10; // Position y des cœurs dans la fenêtre
 
-        for (int i = 0; i < (3 - nombreAttrapages); i++) {
+        int nombreVies = heros.getVies(); // Obtenir le nombre actuel de vies de l'héros
+
+        for (int i = 0; i < (nombreVies -nombreAttrapages) ; i++) {
             // Dessiner un cœur sous forme de deux cercles et un triangle
             g.fillOval(x, y, 20, 20);
             g.fillOval(x + 10, y, 20, 20);
@@ -173,6 +176,9 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             x += 30; // Espacement entre les cœurs
         }
     }
+
+
+
     private void initialiserMurs() {
         murs = new boolean[SIZE][SIZE];
 
@@ -199,22 +205,27 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         }
     }
     
+    
     private void traitementCollisionPiege() {
-        heros.perdreVie(); // Décrémenter le nombre de vies du héros
-        nombreAttrapages++; 
         
-        initialiserJeu();
-
-        if (nombreAttrapages <  3) {
-            JOptionPane.showMessageDialog(this, " You fell into a trap! You have " + (3- nombreAttrapages) + " lives left. Stay alert !");
-            // Si le héros a perdu une vie, redessinez l'interface
-            repaint();
+    	 
+    	
+    	heros.perdreVie();
+        
+        // Vous pouvez retirer la ligne suivante pour ne pas réinitialiser le jeu à chaque collision
+        // initialiserJeu();
+        
+        if ( nombreAttrapages < heros.getVies()) {
+            JOptionPane.showMessageDialog(this, "You fell into a trap! You have " + (heros.getVies()-nombreAttrapages) + " lives left. Stay alert,you lost 2 lives!");
         } else {
             JOptionPane.showMessageDialog(this, "Game Over! No more lives remaining.");
             timer.stop();
-            System.exit(0); // Terminer le programme
+            System.exit(0);
         }
+        
+        repaint();
     }
+    
     
     private void verifierCollision() {
         // Vérifier la collision avec le monstre
@@ -231,7 +242,17 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         if (heros.x == piege.x && heros.y == piege.y) {
             traitementCollisionPiege();
         }
-    }
+     // Vérifier la collision avec l'aide
+         if (help != null && help.estRencontre(heros)) {
+        	nombreAttrapages--;
+            //help.incrementerVie(heros);
+            help = null; // Supprimer l'aide après la rencontre
+        }
+        
+        
+          }
+    
+    
    
    
    
@@ -241,21 +262,17 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             (heros.x == piege.x && heros.y == piege.y)) {
 
             nombreAttrapages++;
-            heros.perdreVie(); // Décrémenter le nombre de vies du héros
-            
-            initialiserJeu();
-            
-            if (nombreAttrapages < 3) {
-                JOptionPane.showMessageDialog(this, " You are caught! You have " + (3 - nombreAttrapages) + " lives left. Stay alert !");
-                //heros.perdreVie(); // Décrémenter le nombre de vies du héros
-                //initialiserJeu();
+            heros.perdreVie();
 
-                // Si le héros a perdu une vie, redessinez l'interface
+            initialiserJeu();
+
+            if (nombreAttrapages < heros.getVies()) {
+                JOptionPane.showMessageDialog(this, " You are caught! You have " + (heros.getVies() - nombreAttrapages) + " lives left. Stay alert !");
                 repaint();
             } else {
                 JOptionPane.showMessageDialog(this, "Game Over! Caught 3 times.");
                 timer.stop();
-                System.exit(0); // Terminer le programme
+                System.exit(0);
             }
         }
     }
@@ -272,16 +289,24 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (herosABouge) {
-            //monstre.deplacerAleatoirement(murs);
+            // Déplacer les monstres et le fantôme
             fantome.deplacerAleatoirement(murs);
             monstre.deplacerIntelligemment(murs, heros);
             fantome.deplacerIntelligemment(murs, heros);
+            // Vérifier si le déplacement du fantôme est valide
+            fantome.estDeplacementValide(murs);
+
+            // Vérifier la collision après chaque déplacement du héros
+            verifierCollision();
+            verifierVictoire();
+
             herosABouge = false;
         }
-        verifierCollision();
-        verifierVictoire();
+
+        // Redessiner l'interface
         repaint();
     }
+
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -360,6 +385,11 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         
         // Dessine le piège
         g.drawImage(piegeImage, piege.x * CELL_SIZE, piege.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        
+     /// Dessiner l'aide
+        if (help != null) {
+            help.dessiner(g, CELL_SIZE);
+        }
     }
     
 

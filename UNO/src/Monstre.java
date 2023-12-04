@@ -63,6 +63,14 @@ class Monstre extends Personne {
 	@Override
 	void deplacerAleatoirement(boolean[][] murs) {
 		// TODO Auto-generated method stub
+		return ;
 		
 	}
+
+	boolean estDeplacementValide( boolean[][] murs) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 }
