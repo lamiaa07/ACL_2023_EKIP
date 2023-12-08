@@ -7,7 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javazoom.jl.decoder.Bitstream;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.advanced.AdvancedPlayer;
+import javazoom.jl.player.advanced.PlaybackEvent;
+import javazoom.jl.player.advanced.PlaybackListener;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
 
 
 
@@ -17,6 +25,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
      Tresor tresor;
     Heros heros;
     Monstre monstre;
+    Monstre2 monstre2;
     boolean[][] murs;
     Fantome fantome;
      Piege piege;
@@ -30,7 +39,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     private static final int CELL_SIZE_NIVEAU_3 =37;
     //private List<Monstre> monstres;
     //private List<Fantome> fantomes;
-
+    private AdvancedPlayer player;
     private Timer timer;
     int nombreAttrapages;
     private Image herosImage;
@@ -40,6 +49,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     private Image solImage;
     private Image fantomeImage;
     private Image piegeImage;
+    private Image monstre2Image;
     Help help;
     Labyrinthe() {
         setTitle("Labyrinth Game");
@@ -49,6 +59,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         setLocationRelativeTo(null);
         setResizable(false);
         initialiserJeu();
+        jouerMusique("Musique/musi1.mp3");
         
         	// Timer
 
@@ -65,6 +76,8 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
          solImage = new ImageIcon("Images/sol.png").getImage(); // Remplacez "sol.png" par le chemin de votre image de sol
          fantomeImage = new ImageIcon("Images/Fantome.png").getImage();
          piegeImage = new ImageIcon("Images/piege.png").getImage();
+         monstre2Image = new ImageIcon("Images/monstre2.png").getImage();
+         
     }
     
     private void initialiserTailleFenetre() {
@@ -122,6 +135,9 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         for (int i = 0; i < nombreFantomes; i++) {
             placerFantome();
         }
+     // Add Monstre2 instance
+        monstre2 = new Monstre2(1, SIZE - 2);
+        
         placerPiege();
         help = Help.creerAideAleatoire(murs, heros);
         
@@ -146,6 +162,13 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         do {
             monstre = new Monstre(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
         } while (monstre.x == heros.x && monstre.y == heros.y);
+    }
+    
+    private void placerMonstre2() {
+        Random random = new Random();
+        do {
+            monstre2 = new Monstre2(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
+        } while (monstre2.x == heros.x && monstre2.y == heros.y);
     }
     private void dessinerTresor(Graphics g) {
         g.setColor(Color.YELLOW); // Vous pouvez changer la couleur du trésor selon vos préférences
@@ -242,6 +265,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         if (heros.x == piege.x && heros.y == piege.y) {
             traitementCollisionPiege();
         }
+        
      // Vérifier la collision avec l'aide
          if (help != null && help.estRencontre(heros)) {
         	nombreAttrapages--;
@@ -249,6 +273,10 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             help = null; // Supprimer l'aide après la rencontre
         }
         
+         // Vérifier la collision avec le monstre2
+         if (heros.x == monstre2.x && heros.y == monstre2.y) {
+             traitementCollision();
+         }
         
           }
     
@@ -259,7 +287,8 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     private void traitementCollision() {
         if ((heros.x == monstre.x && heros.y == monstre.y) ||
             (heros.x == fantome.x && heros.y == fantome.y) ||
-            (heros.x == piege.x && heros.y == piege.y)) {
+            (heros.x == piege.x && heros.y == piege.y)||
+            (heros.x == monstre2.x && heros.y == monstre2.y)){
 
             nombreAttrapages++;
             heros.perdreVie();
@@ -293,6 +322,8 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             fantome.deplacerAleatoirement(murs);
             monstre.deplacerIntelligemment(murs, heros);
             fantome.deplacerIntelligemment(murs, heros);
+            monstre2.deplacerIntelligemment(murs, heros);
+            //monstre2.estDeplacementValide(murs);
             // Vérifier si le déplacement du fantôme est valide
             fantome.estDeplacementValide(murs);
 
@@ -386,12 +417,37 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         // Dessine le piège
         g.drawImage(piegeImage, piege.x * CELL_SIZE, piege.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
         
+     // Dessine le Monstre2
+        g.drawImage(monstre2Image, monstre2.x * CELL_SIZE, monstre2.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+
+        
      /// Dessiner l'aide
         if (help != null) {
             help.dessiner(g, CELL_SIZE);
         }
     }
     
+    private void jouerMusique(String filePath) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            player = new AdvancedPlayer(fileInputStream, javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice());
+            player.setPlayBackListener(new PlaybackListener() {
+                @Override
+                public void playbackFinished(PlaybackEvent evt) {
+                    // You can add actions to perform after the music playback here
+                }
+            });
+            new Thread(() -> {
+                try {
+                    player.play();
+                } catch (JavaLayerException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (IOException | JavaLayerException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static void main(String[] args) {
