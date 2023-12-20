@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.Stack;
 
 class Fantome extends Monstre {
     Fantome(int x, int y) {
@@ -7,25 +7,31 @@ class Fantome extends Monstre {
 
     @Override
     void deplacerIntelligemment(boolean[][] murs, Heros heros) {
-        Random random = new Random();
-        int direction;
-        do {
-            direction = random.nextInt(4);
-        } while (!estDeplacementValide(direction, murs));
+        Stack<Position> stack = new Stack<>();
+        stack.push(new Position(x, y));
 
-        switch (direction) {
-            case 0:
-                x--;
-                break;
-            case 1:
-                x++;
-                break;
-            case 2:
-                y--;
-                break;
-            case 3:
-                y++;
-                break;
+        boolean[][] visite = new boolean[murs.length][murs[0].length];
+        visite[x][y] = true;
+
+        while (!stack.isEmpty()) {
+            Position current = stack.pop();
+
+            if (current.x == heros.x && current.y == heros.y) {
+                // Trouvé le héros, déplacer le monstre dans cette direction
+                if (x < current.x) {
+                    x++;
+                } else if (x > current.x) {
+                    x--;
+                } else if (y < current.y) {
+                    y++;
+                } else if (y > current.y) {
+                    y--;
+                }
+                return;
+            }
+
+            // Ajouter les positions voisines à la pile, même si elles sont des murs
+            ajouterVoisins(current, stack, visite, murs);
         }
     }
 

@@ -1,3 +1,4 @@
+import java.util.Enumeration;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -7,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -29,16 +32,18 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     boolean[][] murs;
     Fantome fantome;
      Piege piege;
-    private int niveau;
+    int niveau;
     private boolean herosABouge;
-    private static final int SIZE_NIVEAU_1 = 15;
+    private static final int SIZE_NIVEAU_1 = 18;
     private static final int SIZE_NIVEAU_2 = 20;
     private static final int SIZE_NIVEAU_3 = 23;
-    private static final int CELL_SIZE_NIVEAU_1 =30;
+    private static final int CELL_SIZE_NIVEAU_1 =32;
     private static final int CELL_SIZE_NIVEAU_2 =35;
     private static final int CELL_SIZE_NIVEAU_3 =37;
     //private List<Monstre> monstres;
     //private List<Fantome> fantomes;
+    private BufferedImage bufferImage;
+    private Graphics bufferGraphics;
     private AdvancedPlayer player;
     private Timer timer;
     int nombreAttrapages;
@@ -53,6 +58,17 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     Help help;
     Labyrinthe() {
         setTitle("Labyrinth Game");
+
+        // Modifiez la police de caractères dans votre constructeur
+        Font welcomeFont = new Font("Serif", Font.BOLD, 20);
+        JLabel bienvenueLabel = new JLabel("Bienvenue au jeu !");
+        bienvenueLabel.setFont(welcomeFont);
+
+
+        // Ajoutez ces lignes pour changer le style de la police
+        Font customFont = new Font("Monospaced", Font.BOLD, 14);
+        setUIFont(customFont);
+
         demanderNiveau(); // Demander le niveau en premier
         initialiserTailleFenetre(); // Initialiser la taille de la fenêtre en fonction du niveau
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,26 +76,44 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         setResizable(false);
         initialiserJeu();
         jouerMusique("Musique/musi1.mp3");
-        
-        	// Timer
 
+        // Timer
         timer = new Timer(500, this);
         timer.start();
 
         addKeyListener(this);
         setFocusable(true);
-         nombreAttrapages = 0;
-         herosImage = new ImageIcon("Images/Heros.png").getImage(); // Remplacez "heros.png" par le chemin de votre image de héros
-         monstreImage = new ImageIcon("Images/Monstre.png").getImage(); // Remplacez "monstre.png" par le chemin de votre image de monstre
-         tresorImage = new ImageIcon("Images/tresor.png").getImage(); // Remplacez "tresor.png" par le chemin de votre image de trésor
-         murImage = new ImageIcon("Images/mur.png").getImage(); // Remplacez "mur.png" par le chemin de votre image de mur
-         solImage = new ImageIcon("Images/sol.png").getImage(); // Remplacez "sol.png" par le chemin de votre image de sol
-         fantomeImage = new ImageIcon("Images/Fantome.png").getImage();
-         piegeImage = new ImageIcon("Images/piege.png").getImage();
-         monstre2Image = new ImageIcon("Images/monstre2.png").getImage();
-         
+        
+
+        
+
+       
+
+        nombreAttrapages = 0;
+        herosImage = new ImageIcon("Images/Heros.png").getImage(); // Remplacez "heros.png" par le chemin de votre image de héros
+        monstreImage = new ImageIcon("Images/Monstre.png").getImage(); // Remplacez "monstre.png" par le chemin de votre image de monstre
+        tresorImage = new ImageIcon("Images/tresor.png").getImage(); // Remplacez "tresor.png" par le chemin de votre image de trésor
+        murImage = new ImageIcon("Images/mur.png").getImage(); // Remplacez "mur.png" par le chemin de votre image de mur
+        solImage = new ImageIcon("Images/sol.png").getImage(); // Remplacez "sol.png" par le chemin de votre image de sol
+        fantomeImage = new ImageIcon("Images/Fantome.png").getImage();
+        piegeImage = new ImageIcon("Images/piege.png").getImage();
+        monstre2Image = new ImageIcon("Images/monstre2.png").getImage();
+
+        bufferImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        bufferGraphics = bufferImage.getGraphics();
     }
-    
+
+    private static void setUIFont(Font font) {
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof javax.swing.plaf.FontUIResource) {
+                UIManager.put(key, font);
+            }
+        }
+    }
+
     private void initialiserTailleFenetre() {
         switch (niveau) {
             case 1:
@@ -96,26 +130,26 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
                 break;
         }
         setSize(SIZE * CELL_SIZE, SIZE * CELL_SIZE);
-        
     }
-    private void demanderNiveau() {
-    	 String niveauStr = JOptionPane.showInputDialog(this, "Choisissez le niveau (1, 2, ou 3):");
 
-         // Ajouter une boucle pour s'assurer que le joueur entre un niveau valide
-         while (true) {
-             try {
-                 niveau = Integer.parseInt(niveauStr);
-                 if (niveau >= 1 && niveau <= 3) {
-                     break; // Sortir de la boucle si le niveau est valide
-                 } else {
-                     niveauStr = JOptionPane.showInputDialog(this, "Veuillez entrer un niveau valide (1, 2, ou 3):");
-                 }
-             } catch (NumberFormatException e) {
-                 niveauStr = JOptionPane.showInputDialog(this, "Veuillez entrer un nombre valide (1, 2, ou 3):");
-             }
-         }
-     }
-    private void initialiserJeu() {
+    private void demanderNiveau() {
+        String niveauStr = JOptionPane.showInputDialog(this, "Choisissez le niveau (1, 2, ou 3):");
+
+        while (true) {
+            try {
+                niveau = Integer.parseInt(niveauStr);
+                if (niveau >= 1 && niveau <= 3) {
+                    break;
+                } else {
+                    niveauStr = JOptionPane.showInputDialog(this, "Veuillez entrer un niveau valide (1, 2, ou 3):");
+                }
+            } catch (NumberFormatException e) {
+                niveauStr = JOptionPane.showInputDialog(this, "Veuillez entrer un nombre valide (1, 2, ou 3):");
+            }
+        }
+    }
+
+    void initialiserJeu() {
     	
         heros = new Heros(1, 1);
         initialiserMurs();
@@ -135,18 +169,26 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         for (int i = 0; i < nombreFantomes; i++) {
             placerFantome();
         }
-     // Add Monstre2 instance
-        monstre2 = new Monstre2(1, SIZE - 2);
+        // Placer le monstre2 uniquement au niveau 3
+        
+            placerMonstre2();
+        
+        
+        // Placer le fantôme dès le niveau 2
+         
+            placerFantome();
+     
         
         placerPiege();
         help = Help.creerAideAleatoire(murs, heros);
         
     }
 
-    
+  
+
     private void placerPiege() {
         Random random = new Random();
-        int nombrePieges = niveau * 2; // Niveau 1: 2 pièges, Niveau 2: 4 pièges, Niveau 3: 6 pièges
+        int nombrePieges = niveau * 2; 
         for (int i = 0; i < nombrePieges; i++) {
             piege = new Piege(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
         }
@@ -155,21 +197,25 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     private void placerFantome() {
         Random random = new Random();
         fantome = new Fantome(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
-    }
+        }
 
     private void placerMonstre() {
         Random random = new Random();
+        
         do {
             monstre = new Monstre(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
         } while (monstre.x == heros.x && monstre.y == heros.y);
     }
     
+    
     private void placerMonstre2() {
         Random random = new Random();
+        
         do {
             monstre2 = new Monstre2(random.nextInt(SIZE - 2) + 1, random.nextInt(SIZE - 2) + 1);
         } while (monstre2.x == heros.x && monstre2.y == heros.y);
     }
+    
     private void dessinerTresor(Graphics g) {
         g.setColor(Color.YELLOW); // Vous pouvez changer la couleur du trésor selon vos préférences
         g.fillRect(tresor.x * CELL_SIZE, tresor.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -221,70 +267,15 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             int x = random.nextInt(SIZE - 2) + 1;
             int y = random.nextInt(SIZE - 2) + 1;
 
-            if (!murs[x][y]) {
+            // Vérifier si les coordonnées générées correspondent à la position initiale de l'héros (1, 1)
+            if (!((x == 1 && y == 1) || (x == 2 && y == 2)|| (x == 2 && y == 1)) && !murs[x][y]) {
                 murs[x][y] = true;
                 mursPlaces++;
             }
         }
     }
-    
-    
-    private void traitementCollisionPiege() {
-        
-    	 
-    	
-    	heros.perdreVie();
-        
-        // Vous pouvez retirer la ligne suivante pour ne pas réinitialiser le jeu à chaque collision
-        // initialiserJeu();
-        
-        if ( nombreAttrapages < heros.getVies()) {
-            JOptionPane.showMessageDialog(this, "You fell into a trap! You have " + (heros.getVies()-nombreAttrapages) + " lives left. Stay alert,you lost 2 lives!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Game Over! No more lives remaining.");
-            timer.stop();
-            System.exit(0);
-        }
-        
-        repaint();
-    }
-    
-    
-    private void verifierCollision() {
-        // Vérifier la collision avec le monstre
-        if (heros.x == monstre.x && heros.y == monstre.y) {
-            traitementCollision();
-        }
 
-        // Vérifier la collision avec le fantôme
-        if (heros.x == fantome.x && heros.y == fantome.y) {
-            traitementCollision();
-        }
-        
-     // Vérifier la collision avec le fantôme
-        if (heros.x == piege.x && heros.y == piege.y) {
-            traitementCollisionPiege();
-        }
-        
-     // Vérifier la collision avec l'aide
-         if (help != null && help.estRencontre(heros)) {
-        	nombreAttrapages--;
-            //help.incrementerVie(heros);
-            help = null; // Supprimer l'aide après la rencontre
-        }
-        
-         // Vérifier la collision avec le monstre2
-         if (heros.x == monstre2.x && heros.y == monstre2.y) {
-             traitementCollision();
-         }
-        
-          }
-    
-    
-   
-   
-   
-    private void traitementCollision() {
+    void traitementCollision() {
         if ((heros.x == monstre.x && heros.y == monstre.y) ||
             (heros.x == fantome.x && heros.y == fantome.y) ||
             (heros.x == piege.x && heros.y == piege.y)||
@@ -305,6 +296,41 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             }
         }
     }
+    
+    
+    
+    
+    private void verifierCollision() {
+        // Vérifier la collision avec le monstre
+        if (heros.x == monstre.x && heros.y == monstre.y) {
+            traitementCollision();
+        }
+
+        // Vérifier la collision avec le fantôme
+        if (heros.x == fantome.x && heros.y == fantome.y) {
+            traitementCollision();
+        }
+        
+     // Vérifier la collision avec le piege
+        if (heros.x == piege.x && heros.y == piege.y) {
+            traitementCollision();
+        }
+        
+     // Vérifier la collision avec l'aide
+         if (help != null && help.estRencontre(heros)) {
+        	nombreAttrapages--;
+            //help.incrementerVie(heros);
+            help = null; // Supprimer l'aide après la rencontre
+        }
+        
+         // Vérifier la collision avec le monstre2
+         if (heros.x == monstre2.x && heros.y == monstre2.y) {
+             traitementCollision();
+         }
+        
+          }
+    
+
 
 
 
@@ -319,23 +345,39 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         if (herosABouge) {
             // Déplacer les monstres et le fantôme
-            fantome.deplacerAleatoirement(murs);
-            monstre.deplacerIntelligemment(murs, heros);
-            fantome.deplacerIntelligemment(murs, heros);
+        	
+               //fantome.deplacerAleatoirement(murs);
+        	
+        	monstre.deplacerIntelligemment(murs, heros);
+        	
+        	
+        	if (niveau==2 || niveau==3) {
+               fantome.deplacerIntelligemment(murs, heros);
+               fantome.estDeplacementValide(murs); 
+        	}
+        	
+            
+            if (niveau==3) {
             monstre2.deplacerIntelligemment(murs, heros);
-            //monstre2.estDeplacementValide(murs);
-            // Vérifier si le déplacement du fantôme est valide
-            fantome.estDeplacementValide(murs);
+            monstre2.estDeplacementValide(murs);
+            }
+            
+            
 
             // Vérifier la collision après chaque déplacement du héros
             verifierCollision();
+            
+            
             verifierVictoire();
 
             herosABouge = false;
+            
+            
+         // Redessiner l'interface
+            repaint();
         }
 
-        // Redessiner l'interface
-        repaint();
+        
     }
 
 
@@ -385,46 +427,52 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
+        bufferGraphics.clearRect(0, 0, getWidth(), getHeight());
 
         // Dessine le labyrinthe
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (murs[i][j]) {
-                    g.drawImage(murImage, i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+                    dessinerImageAvecTransformation(bufferGraphics, murImage, i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 } else {
-                    g.drawImage(solImage, i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+                    dessinerImageAvecTransformation(bufferGraphics, solImage, i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
             }
         }
 
         // Dessine le trésor
-        g.drawImage(tresorImage, tresor.x * CELL_SIZE, tresor.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        bufferGraphics.drawImage(tresorImage, tresor.x * CELL_SIZE, tresor.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
 
         // Dessine le héros
-        g.drawImage(herosImage, heros.x * CELL_SIZE, heros.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        bufferGraphics.drawImage(herosImage, heros.x * CELL_SIZE, heros.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
 
-        
         // Dessine le monstre
-        g.drawImage(monstreImage, monstre.x * CELL_SIZE, monstre.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        bufferGraphics.drawImage(monstreImage, monstre.x * CELL_SIZE, monstre.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
 
         // Dessine le fantôme
-        g.drawImage(fantomeImage, fantome.x * CELL_SIZE, fantome.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        bufferGraphics.drawImage(fantomeImage, fantome.x * CELL_SIZE, fantome.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
 
         // Dessine les cœurs
-        dessinerCoeurs(g);
-        
-        // Dessine le piège
-        g.drawImage(piegeImage, piege.x * CELL_SIZE, piege.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
-        
-     // Dessine le Monstre2
-        g.drawImage(monstre2Image, monstre2.x * CELL_SIZE, monstre2.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+        dessinerCoeurs(bufferGraphics);
 
-        
-     /// Dessiner l'aide
+        // Dessine le piège
+        bufferGraphics.drawImage(piegeImage, piege.x * CELL_SIZE, piege.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+
+        // Dessine le Monstre2
+        bufferGraphics.drawImage(monstre2Image, monstre2.x * CELL_SIZE, monstre2.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, null);
+
+        /// Dessiner l'aide
         if (help != null) {
-            help.dessiner(g, CELL_SIZE);
+            help.dessiner(bufferGraphics, CELL_SIZE);
         }
+
+        // Dessine bufferImage sur l'écran
+        g.drawImage(bufferImage, 0, 0, this);
+    }
+    private void dessinerImageAvecTransformation(Graphics g, Image image, int x, int y, int width, int height) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.drawImage(image, x, y, width, height, null);
     }
     
     private void jouerMusique(String filePath) {
@@ -448,8 +496,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             e.printStackTrace();
         }
     }
-
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Labyrinthe jeu = new Labyrinthe();

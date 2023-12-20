@@ -10,7 +10,7 @@ class Help {
 
     private static final Image helpImage = new ImageIcon("Images/Help.png").getImage();
 
-    private Help(int x, int y) {
+    Help(int x, int y) {
         this.x = x;
         this.y = y;
     }

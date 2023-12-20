@@ -4,6 +4,14 @@ class Monstre extends Personne {
     Monstre(int x, int y) {
         super(x, y);
     }
+    
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
 
     void deplacerIntelligemment(boolean[][] murs, Heros heros) {
         Stack<Position> stack = new Stack<>();
@@ -34,7 +42,7 @@ class Monstre extends Personne {
         }
     }
 
-    private void ajouterVoisins(Position current, Stack<Position> stack, boolean[][] visite, boolean[][] murs) {
+    	void ajouterVoisins(Position current, Stack<Position> stack, boolean[][] visite, boolean[][] murs) {
         int x = current.x;
         int y = current.y;
 
@@ -44,14 +52,14 @@ class Monstre extends Personne {
         ajouterSiValide(stack, visite, x, y + 1, murs);
     }
 
-    private void ajouterSiValide(Stack<Position> stack, boolean[][] visite, int x, int y, boolean[][] murs) {
+     void ajouterSiValide(Stack<Position> stack, boolean[][] visite, int x, int y, boolean[][] murs) {
         if (x >= 0 && x < visite.length && y >= 0 && y < visite[0].length && !visite[x][y] && !murs[x][y]) {
             stack.push(new Position(x, y));
             visite[x][y] = true;
         }
     }
 
-    private static class Position {
+    static class Position {
         int x, y;
 
         Position(int x, int y) {
