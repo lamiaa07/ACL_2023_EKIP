@@ -25,19 +25,19 @@ Déplacement : Utilisez les touches Haut, Bas, Gauche, Droite pour naviguer dans
 
  - Ennemis et Obstacles :
 
-* La Police : Toujours à l'affût, prête à intervenir à la moindre alerte.
+ La Police : Toujours à l'affût, prête à intervenir à la moindre alerte.
 
-* Chiens de la Police - Plus rapides que le voleur, ils représentent une menace constante.
+Chiens de la Police - Plus rapides que le voleur, ils représentent une menace constante.
 
-* Lasers (Fantômes) - Capables de se déplacer le long des murs, rendant leur évitement encore plus difficile.
+Lasers (Fantômes) - Capables de se déplacer le long des murs, rendant leur évitement encore plus difficile.
 
-* Caméras Infrarouges (Pièges) - Des yeux électroniques qui scrutent chaque recoin.
+Caméras Infrarouges (Pièges) - Des yeux électroniques qui scrutent chaque recoin.
 
-* Environnement : La Banque (Labyrinthe) - Un dédale en constante évolution, avec des murs aléatoires et des pièges sournois.
+Environnement : La Banque (Labyrinthe) - Un dédale en constante évolution, avec des murs aléatoires et des pièges sournois.
 
  - Aides : 
 
-* Cases d'Aide : Elles offrent une vie supplémentaire au voleur, essentielle pour survivre plus longtemps.
+Cases d'Aide : Elles offrent une vie supplémentaire au voleur, essentielle pour survivre plus longtemps.
 
 ## III-Objectif : 
 
@@ -68,6 +68,11 @@ mvn clean package
 cd target 
 
 java -cp Code-0.0.1-SNAPSHOT.jar
+
+
+
+![inter_graph](https://github.com/lamiaa07/ACL_2023_EKIP/assets/147589708/3efc5faa-59a1-418d-a0be-f8e71e84f304)
+
 
 
 
