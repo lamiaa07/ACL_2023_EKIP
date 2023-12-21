@@ -8,7 +8,7 @@
 * ADOKOU Aimé
 * ZANNOUTI Noufal
 -------------------------------------------------------------------------
-      # Guide du Joueur pour "Casa de Papel: Le Labyrinthe de la Banque
+# Guide du Joueur pour "Casa de Papel: Le Labyrinthe de la Banque
 
 Plongez dans l'univers de "Casa de Papel" en incarnant un voleur intrépide au sein d'une équipe planifiant le casse du siècle. 
 
@@ -39,7 +39,9 @@ Déplacement : Utilisez les touches Haut, Bas, Gauche, Droite pour naviguer dans
 
 * Cases d'Aide : Elles offrent une vie supplémentaire au voleur, essentielle pour survivre plus longtemps.
 
-## III-Objectif : Des Millions d'Euros (Trésor) - Le butin ultime, bien gardé dans le coffre le plus sécurisé.
+## III-Objectif : 
+
+- Touverle trésor (Des millions d'euros) : Ce trésor inestimable, soigneusement protégé dans un coffre-fort extrêmement sécurisé.
 
 ## IV-Stratégies de Jeu:
 
