@@ -1,0 +1,24 @@
+# Objectifs du sprint 3 :
+
+
+-Mettre à jour le diagramme de classes ;
+
+-Implémenter une méthode pour choisir les niveaux (pas faite en sprint 2) ;
+
+-Implémenter une méthode pour modifier la taille du Labyrinthe en fonction du niveau choisi ;
+
+-Ajouter une classe fantôme qui hérite de classe monstre qui peut franchir les murs du labyrinthe ;
+
+-Ajouter une classe Trésor (Victoire= rencontre héro avec trésor) ;
+
+-Ajouter une classe Piège (L'héro perd une vie à la rencontre du piège) ;
+
+-Ajouter une classe Help (permet à l’héro de gagner une vie) ;
+
+-Implémenter des méthodes pour placer le piège et le trésor aléatoirement (en dehors des murs) ;
+
+-Implémenter une méthode de déplacement intelligent du monstre et fantôme vers l'héro ;
+
+-Améliorer l'interface graphique ;
+
+-Mettre à jour le diagramme de séquences ;

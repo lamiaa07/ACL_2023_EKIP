@@ -1,0 +1,18 @@
+# SPRINT 2:
+
+-Réaliser les objectifs qui restent à faire du sprint 1 ;
+
+-Mettre à jour le diagramme de classes ;
+
+-Modifier la méthode qui génère le labyrinthe pour permettre au joueur de choisir le niveau de jeu souhaité ;
+
+-Ajouter une méthode de déplacement des personnages : Joueur déplace l'héro avec des touches du clavier, et le monstre se déplace à l'intérieur d labyrinthe sans rencontrer les murs ;
+
+-Implémenter la méthode d'attaque (rencontre entre héro et monstre) ;
+
+-Implémenter une méthode qui permet à l'héro de gagner ou perdre des vies ;
+
+-Réaliser une interface graphique simplifiée du Labyrinthe ;
+
+-Faire un diagramme de séquences (interactions entre les méthodes du projet) ;
+

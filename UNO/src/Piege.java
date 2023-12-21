@@ -9,5 +9,8 @@ class Piege extends Fantome {
     @Override
     public void deplacerAleatoirement(boolean[][] murs) {
         // Ne fait rien, le piège reste immobile
+    	
+    	
+    	
     }
 }

@@ -1,0 +1,17 @@
+# Objectif du Sprint 4 :
+
+
+
+-Mettre à jour le diagramme de classes ; 
+
+-Implémenter une méthode pour ne déplacer le fantôme que dans les niveaux 2 et 3 ;
+
+-Modifier le code pour résoudre un problème d’affichage : clignotement de l'interface graphique au niveau 3 ;
+
+-Modifier la méthode du placement initial de l’héro de telle façon qu’il ne se fasse pas sur un mur ou un élément du jeu ;
+
+-Ajouter une classe monstre2 qui hérite du monstre où implémenter une méthode de déplacement rapide et diagonale ;
+
+-Ajouter une méthode pour lancer une musique durant le jeu ;
+
+-Réaliser des tests JUNIT sur quelques méthodes implémentées ;
