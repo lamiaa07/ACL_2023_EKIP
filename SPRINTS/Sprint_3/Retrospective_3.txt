@@ -1,9 +1,0 @@
-# Retrospective Sprint 3 : 
-
-
-* On a réussi à réaliser nos objectifs sauf pour le déplacement intelligent du fantôme : On n’arrivait pas à le faire déplacer intelligemment en franchissant en même temps les murs.
-
-
-
-
-* Concernant les diagrammes, on devait améliorer notre diagramme de séquence pour avoir un plus détaillé.

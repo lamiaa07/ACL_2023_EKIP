@@ -75,7 +75,7 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
         setLocationRelativeTo(null);
         setResizable(false);
         initialiserJeu();
-        jouerMusique("Musique/musi1.mp3");
+        jouerMusique("Musique/musi.mp3");
 
         // Timer
         timer = new Timer(500, this);

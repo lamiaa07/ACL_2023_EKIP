@@ -1,5 +1,0 @@
-On change le code pour pouvoir générer le labyrinthe en se basant sur le niveau sélectionné par le joueur.
-On rajoute des cases pièges et un trésor avec des interactions.
-On conçoit la classe "fantôme".
-On crée une méthode d'attaque.
-Amélioration de l'interface graphique.

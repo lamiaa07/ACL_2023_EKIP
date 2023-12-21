@@ -1,7 +1,0 @@
-# Retrospective du Sprint 4 :
-
-
-On a presque réalisé tous les objectifs de ce Sprint 4.
-
-
-Pour les objectifs généraux du projet, la seule chose qu’on a eu du mal à réussir était de générer un labyrinthe depuis un fichier.

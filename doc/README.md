@@ -1,9 +1,0 @@
-# ACL_2023_EKIP
-
-LAMIAA SAFIR
-
-AYA MOUSRIJ
-
-Aimé 
-
-Noufal

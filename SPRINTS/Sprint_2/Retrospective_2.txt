@@ -1,9 +1,0 @@
-# Retrospective du sprint 2 :
-
-On a commencé à coder la méthode pour choisir les niveaux mais on n’a pas pu la finir avant la fin du sprint 2.
-
-Pourtant a réussi à avoir une interface graphique du jeu simplifiée, avec un héros et un monstre qui se déplacent.
- 
-Le jeu s’arrête quand l’héro perd ses 3 vies.
-
-On n’a pas fait de boucle dans notre diagramme de séquence, chose nécessaire à réaliser dans les prochains sprints.

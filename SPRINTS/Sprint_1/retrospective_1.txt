@@ -1,6 +1,0 @@
-# Retrospective Sprint1 :
-
-
-À cause du manque des réunions, le travail du groupe n'était pas efficace et on n’a pas pu avoir un bon début de projet.
-
-On n’a pas réussi à générer le labyrinthe depuis un fichier, alors on a choisi de générer un aléatoire en gardant les mêmes dimensions (Largeur et longueur).
