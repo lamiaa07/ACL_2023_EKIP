@@ -503,4 +503,4 @@ class Labyrinthe extends JFrame implements ActionListener, KeyListener {
             jeu.setVisible(true);
         });
     }
-}
+} 
