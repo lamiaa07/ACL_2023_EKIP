@@ -61,12 +61,9 @@ chaque niveau teste votre capacité à penser vite et à agir de manière furtiv
 
 ## VI- RUN: 
 
-cd Game 
-   
+cd UNO    
 mvn clean package
-
 cd target 
-
 java -cp Code-0.0.1-SNAPSHOT.jar
 
 
