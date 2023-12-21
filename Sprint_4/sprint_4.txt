@@ -15,3 +15,4 @@
 -Ajouter une méthode pour lancer une musique durant le jeu ;
 
 -Réaliser des tests JUNIT sur quelques méthodes implémentées ;
+**********************
